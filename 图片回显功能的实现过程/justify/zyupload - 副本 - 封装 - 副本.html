@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <link rel="stylesheet" href="./zyUpload.css">
+  <script src="./zyFile.js"></script>
+  <script src="./jquery-1.11.1.js"></script>
+  <script src="./zyUpload.js"></script>
+  <style>
+    .oldImgContainer img {
+      width: 300px;
+      vertical-align: top;
+    }
+
+    .oldImgContainer {
+      display: flex;
+    }
+
+    .oldImgContainer .img {
+      position: relative;
+      margin-right: 10px;
+    }
+
+    .oldImgContainer .img button {
+      position: absolute;
+      background-color: #00B7EE;
+      border: none;
+      width: 48px;
+      color: #fff;
+      border-radius: 3px;
+    }
+
+    .oldImgContainer .img button:hover {
+      cursor: pointer;
+      background-color: #00A2D4;
+    }
+
+    .useOldBtn {
+      background-color: #00B7EE;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      margin: 8px 0;
+    }
+
+    .useOldBtn:hover {
+      cursor: pointer;
+      background-color: #00A2D4;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="form-group">
+    <input type="hidden" value="" name="idImg" id="idImg">
+    <label class="col-md-2 control-label">上传身份证复印件：</label>
+    <br>
+    <button class="useOldBtn" id="idImgBtn">使用已上传的照片</button>
+    <div class="col-md-9 oldImgContainer" id="idImgContainer" style="display: none">
+      <!-- <div class="img">
+        <button class="delButton">删除1</button>
+          <img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1553847773432&di=849ad0ca1f605d0e82c4d3d1a3fc5007&imgtype=0&src=http%3A%2F%2Fp1.ifengimg.com%2Ffck%2F2018_01%2F4b3586c88209a81_w640_h429.jpg" alt="">
+      </div>
+      <div class="img">
+        <button class="delButton">删除2</button>
+          <img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1553847773432&di=849ad0ca1f605d0e82c4d3d1a3fc5007&imgtype=0&src=http%3A%2F%2Fp1.ifengimg.com%2Ffck%2F2018_01%2F4b3586c88209a81_w640_h429.jpg" alt="">
+      </div>
+      <div class="img">
+        <button class="delButton">删除3</button>
+          <img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1553847773432&di=849ad0ca1f605d0e82c4d3d1a3fc5007&imgtype=0&src=http%3A%2F%2Fp1.ifengimg.com%2Ffck%2F2018_01%2F4b3586c88209a81_w640_h429.jpg" alt="">
+      </div>
+      -->
+    </div>
+    <div class="col-md-9">
+      <div id="userPersonCardImg"></div>
+    </div>
+  </div>
+  <div id="addImg"></div>
+
+
+  <script>
+    $(document).ready(function () {
+      // 后台传过来的图形
+      var imgListId = [{
+          id: 1,
+          src: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1553847773432&di=849ad0ca1f605d0e82c4d3d1a3fc5007&imgtype=0&src=http%3A%2F%2Fp1.ifengimg.com%2Ffck%2F2018_01%2F4b3586c88209a81_w640_h429.jpg'
+        },
+        {
+          id: 2,
+          src: 'https://ss0.baidu.com/94o3dSag_xI4khGko9WTAnF6hhy/image/h%3D300/sign=c724ff91482309f7f86fab12420f0c39/30adcbef76094b3624c1f1e8adcc7cd98d109d60.jpg'
+        },
+        {
+          id: 3,
+          src: 'https://ss0.baidu.com/-Po3dSag_xI4khGko9WTAnF6hhy/image/h%3D300/sign=eb318aa70d3b5bb5a1d726fe06d3d523/a6efce1b9d16fdfa6c544de2ba8f8c5494ee7b86.jpg'
+        }
+      ]
+
+      // usefulImg最终传回服务器的对象
+      // var usefulOldImg = []
+      // var imgflag = true  // 控制显示与隐藏
+
+      /**
+       * 显示数据库已经存在的照片
+       * @Parma usefulImg 最终返回的照片
+       * @Parma imgflag 控制旧照片显示与隐藏的flag
+       * 
+       * @Parma imgList 后台返回的图片列表
+       * @Parma useOldBtn 控制是否使用旧照片的按钮,query对象，如$(#idImgBtn)
+       * @Parma oldImgContainer 显示旧照片的div对象,query对象，如$(#idImgContainer)
+       */
+      function rewriteImg(usefulImg, imgflag, imgList, useOldBtn, oldImgContainer) {
+        if (imgList && imgList.length > 0) { //如果数据库中有图片
+          // 生成html
+          var imgHtml = ""
+          for (var i = 0; i < imgList.length; i++) {
+            var src = imgList[i].src
+            var id = imgList[i].id
+            imgHtml += `<div class="img" data_id="${id}">
+            <button class="delButton">删除</button>
+              <img src="${src}" alt="">
+          </div>`
+          }
+          oldImgContainer.html(imgHtml)
+
+          // 删除图片按钮的点击事件
+          oldImgContainer.on('click', '.delButton', function (e) {
+            $(e.target.parentNode).hide()
+            usefulImg.splice(usefulImg.indexOf(Number($(e.target.parentNode).attr("data_id"))), 1)
+            if (usefulImg.length <= 0) {
+              oldImgContainer.hide()
+              useOldBtn.text('使用已上传的照片')
+              usefulImg = []
+              imgflag = true
+            }
+          })
+
+          // 控制旧照片的显示与隐藏
+
+          useOldBtn.on('click', function () {
+            if (imgflag) {
+              oldImgContainer.show()
+              useOldBtn.text('不使用已上传的照片')
+              imgList.forEach(function (item, i) {
+                usefulImg.push(item.id)
+              })
+              imgflag = false
+              oldImgContainer.html(imgHtml)
+              console.log(usefulImg)
+            } else {
+              oldImgContainer.hide()
+              useOldBtn.text('使用已上传的身份证照片')
+              usefulImg = []
+              imgflag = true
+              console.log(usefulImg)
+            }
+          })
+
+        } else { // 没有图片
+          useOldBtn.hide()
+        }
+
+      }
+      // 向后台传参 later
+      // $('#idImg').val(usefulImg.join(','))
+
+      var usefulIdImg = []
+      var idImgFlag = true
+      rewriteImg(usefulIdImg,idImgFlag, imgListId, $('#idImgBtn'),$('#idImgContainer'))
+
+
+
+
+
+
+      // 初始化插件
+      $("#userPersonCardImg").zyUpload({
+        width: "650px", // 宽度
+        height: "auto", // 宽度
+        itemWidth: "120px", // 文件项的宽度
+        itemHeight: "100px", // 文件项的高度
+        url: "/upload/UploadAction", // 上传文件的路径
+        multiple: true, // 是否可以多个文件上传
+        dragDrop: true, // 是否可以拖动上传文件
+        del: true, // 是否可以删除文件
+        finishDel: false, // 是否在上传文件完成后删除预览
+        /* 外部获得的回调接口 */
+        onSelect: function (files, allFiles) { // 选择文件的回调方法
+          /* console.info("当前选择了以下文件：");
+          console.info(files);
+          console.info("之前没上传的文件：");
+          console.info(allFiles); */
+          userPersonCardImgFile = allFiles;
+        },
+        onDelete: function (file, files) { // 删除一个文件的回调方法
+          /* console.info("当前删除了此文件：");
+          console.info(file);
+          console.info("当前剩余的文件：");
+          console.info(surplusFiles); */
+          userPersonCardImgFile = files;
+
+        },
+        onSuccess: function (file) { // 文件上传成功的回调方法
+          /* console.info("此文件上传成功：");
+          console.info(file); */
+        },
+        onFailure: function (file) { // 文件上传失败的回调方法
+          /* console.info("此文件上传失败：");
+          console.info(file); */
+        },
+        onComplete: function (responseInfo) { // 上传完成的回调方法
+          /* console.info("文件上传完成");
+          console.info(responseInfo); */
+        }
+      });
+
+      // var listImg = [
+      //   'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1553847773432&di=849ad0ca1f605d0e82c4d3d1a3fc5007&imgtype=0&src=http%3A%2F%2Fp1.ifengimg.com%2Ffck%2F2018_01%2F4b3586c88209a81_w640_h429.jpg',
+      //   'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1553848921666&di=0619978a2467954d4c1b6b5b595e7035&imgtype=0&src=http%3A%2F%2Fhbimg.b0.upaiyun.com%2F2f082db014c1b7c04fd75f84e3b37db44750f88b1bb2e-cAdOYC_fw658'
+      // ]
+
+      // var html = '';
+      // for(var i = 0; i<listImg.length; i++) {
+
+      //   var item = listImg[i];
+      //   html += `<div id="uploadList_${i}" class="upload_append_list">	<div class="file_bar">		<div style="padding:5px;">			<p class="file_name">${i}.png</p><span class="file_del" data-index="${i}" title="删除"></span>		</div>	</div>	<a style="height:100px;width:120px;" href="javascript:void(0)" class="imgBox">		<div class="uploadImg" style="width:105px">			<img id="uploadImage_${i}" class="upload_image" src="${item}" style="width:expression(this.width > 105 ? 105px : this.width)">		</div>	</a>	<p id="uploadProgress_${i}" class="file_progress"></p>	<p id="uploadFailure_${i}" class="file_failure">上传失败，请重试</p>	<p id="uploadSuccess_${i}" class="file_success"></p></div>`
+      // }
+
+      // $('#preview').html(html)
+
+    })
+  </script>
+</body>
+
+</html>
