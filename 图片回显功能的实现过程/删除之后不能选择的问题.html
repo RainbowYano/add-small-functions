@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="./zyUpload.css">
+    <script src="./zyFile.js"></script>
+    <script src="./jquery-1.11.1.js"></script>
+    <script src="./zyUpload.js"></script>
+</head>
+
+<body>
+
+        <div class="col-md-9">
+                <div id="userPersonCardImg"></div>
+            </div>
+
+    <script>
+        $(document).ready(function () {
+
+
+            // 初始化插件
+            $("#userPersonCardImg").zyUpload({
+                width: "650px", // 宽度
+                height: "auto", // 宽度
+                itemWidth: "120px", // 文件项的宽度
+                itemHeight: "100px", // 文件项的高度
+                url: "/upload/UploadAction", // 上传文件的路径
+                multiple: true, // 是否可以多个文件上传
+                dragDrop: true, // 是否可以拖动上传文件
+                del: true, // 是否可以删除文件
+                finishDel: false, // 是否在上传文件完成后删除预览
+                /* 外部获得的回调接口 */
+                onSelect: function (files, allFiles) { // 选择文件的回调方法
+                    /* console.info("当前选择了以下文件：");
+                    console.info(files);
+                    console.info("之前没上传的文件：");
+                    console.info(allFiles); */
+                    userPersonCardImgFile = allFiles;
+                },
+                onDelete: function (file, files) { // 删除一个文件的回调方法
+                    /* console.info("当前删除了此文件：");
+                    console.info(file);
+                    console.info("当前剩余的文件：");
+                    console.info(surplusFiles); */
+                    userPersonCardImgFile = files;
+
+                },
+                onSuccess: function (file) { // 文件上传成功的回调方法
+                    /* console.info("此文件上传成功：");
+                    console.info(file); */
+                },
+                onFailure: function (file) { // 文件上传失败的回调方法
+                    /* console.info("此文件上传失败：");
+                    console.info(file); */
+                },
+                onComplete: function (responseInfo) { // 上传完成的回调方法
+                    /* console.info("文件上传完成");
+                    console.info(responseInfo); */
+                }
+            });
+
+            // var listImg = [
+            //   'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1553847773432&di=849ad0ca1f605d0e82c4d3d1a3fc5007&imgtype=0&src=http%3A%2F%2Fp1.ifengimg.com%2Ffck%2F2018_01%2F4b3586c88209a81_w640_h429.jpg',
+            //   'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1553848921666&di=0619978a2467954d4c1b6b5b595e7035&imgtype=0&src=http%3A%2F%2Fhbimg.b0.upaiyun.com%2F2f082db014c1b7c04fd75f84e3b37db44750f88b1bb2e-cAdOYC_fw658'
+            // ]
+
+            // var html = '';
+            // for(var i = 0; i<listImg.length; i++) {
+
+            //   var item = listImg[i];
+            //   html += `<div id="uploadList_${i}" class="upload_append_list">	<div class="file_bar">		<div style="padding:5px;">			<p class="file_name">${i}.png</p><span class="file_del" data-index="${i}" title="删除"></span>		</div>	</div>	<a style="height:100px;width:120px;" href="javascript:void(0)" class="imgBox">		<div class="uploadImg" style="width:105px">			<img id="uploadImage_${i}" class="upload_image" src="${item}" style="width:expression(this.width > 105 ? 105px : this.width)">		</div>	</a>	<p id="uploadProgress_${i}" class="file_progress"></p>	<p id="uploadFailure_${i}" class="file_failure">上传失败，请重试</p>	<p id="uploadSuccess_${i}" class="file_success"></p></div>`
+            // }
+
+            // $('#preview').html(html)
+
+        })
+    </script>
+</body>
+
+</html>
