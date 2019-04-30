@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <button id="ok">点我</button>
+        <script src="./js/cms/dist/js/jquery.min.js"></script>
+    <script>
+    
+    var testData = [
+            {
+                subjectId: 1,
+                subjectName: 'rainbow1',
+                strMoney: '800',
+                alreadyInvest: '500'
+            },
+            {
+                subjectId: 2,
+                subjectName: 'rainbow2',
+                strMoney: '900',
+                alreadyInvest: '500'
+            }
+        ]
+        
+        function findDataById(array,id) {
+            var data
+            $.each(array,function(index,value){
+                if(value.subjectId == id) {
+                    data = value
+                    return
+                }
+            })
+            return data
+        }
+        $('#ok').click(function() {
+            console.log(findDataById(testData,2))
+            window.rainbow = [1,2,3]
+            // console.log(window)
+        })
+    </script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./jquery-1.11.1.js"></script>
+</head>
+<body>
+    <div class="form-group">
+        <label class="col-md-2 control-label">是否需要做线上风险评估：</label>
+        <div class="col-md-3">
+            <div class="radio">
+                <label>
+                <input type="radio" id="needScore1" name="needScore"  value="1">是
+                </label>
+            </div>
+            <div class="radio">
+                <label>
+                <input type="radio" id="needScore2" name="needScore" value="0">否
+                </label>
+            </div>
+        </div>
+    </div>
+    <button id="ok">ooooo</button>
+    <br/> 
+</body>
+<script>
+    $('#ok').click(function() {
+        
+        if($('input[name="needScore"]:checked').length<=0) {
+            console.log('必须选择一个')
+        } else {
+            console.log('你已经选择了')
+        }
+    })
+    // console.log($('#needScore1').val)
+    // console.log($('#needScore2').val)
+</script>
+</html>
