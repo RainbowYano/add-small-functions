@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<div id="wrapper">
+        <input type="number">
+    <button id="ok">11111</button>
+</div>
+
+    <script src="./js/cms/dist/js/jquery.min.js"></script>
+    <script>
+        
+        $("#wrapper").on("mousewheel", "input[type='number']", function () {
+            console.log(11)
+            return false;
+        });
+        // $('#ok').on('click')
+        // $("input[type='number']").on('mousewheel',function(){
+        //     console.log(11)
+        //     return false
+        // })
+    </script>
+</body>
+</html>
