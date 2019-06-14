@@ -91,6 +91,8 @@
         </div>
     </div>
 
+    <button id="ok">now</button>
+
 
     <script>
         $(document).ready(function () {
@@ -262,6 +264,7 @@
                     console.info("之前没上传的文件：");
                     console.info(allFiles); */
                     userPersonCardImgFile = allFiles;
+                    console.log(allFiles)
                 },
                 onDelete: function (file, files) { // 删除一个文件的回调方法
                     /* console.info("当前删除了此文件：");
